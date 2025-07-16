@@ -8,9 +8,7 @@ import json
 import subprocess
 import os
 # 导入合并mp4和mp3相关模块
-# from moviepy.video.io.VideoFileClip import VideoFileClip
-# from moviepy.audio.io.AudioFileClip import AudioFileClip
-from moviepy.editor import *
+from moviepy.editor import VideoFileClip, AudioFileClip
 
 
 """发送请求：模拟浏览器对url地址发送请求"""
@@ -21,9 +19,10 @@ headers = {
     "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
 }
 # 请求网址：视频播放页面
-url = 'https://www.bilibili.com/video/BV1Pquvz7EZd/?spm_id_from=333.337.search-card.all.click&vd_source=0a9fa60dc05e0583c5edde1708d6eba1'
+url = 'https://www.bilibili.com/video/BV1E937z8EcC/?spm_id_from=333.337.search-card.all.click&vd_source=0a9fa60dc05e0583c5edde1708d6eba1'
 # 发送请求
-response = requests.get(url, headers=headers)
+response = requests.get(url, headers=headers, stream=True)
+total_length = int(response.headers.get('content-length', 0))
 
 """获取数据：获取服务器返回相应数据"""
 # 获取相应的文本数据
@@ -33,8 +32,6 @@ html = response.text
 # 提取标题
 title = re.findall(',"title":"(.*?)","pubdate":', html)[0]
 print(title)
-# print(type(title))
-# print(len(title))
 # 提取视频信息
 info = re.findall('window.__playinfo__=(.*?)</script>', html)[0]
 print(info)
@@ -50,25 +47,22 @@ print(url_video)
 url_audio = json_info['data']['dash']['audio'][0]['baseUrl']
 print(url_audio)
 
-# """数据保存"""
-# # 获取视频内容
-# video_content = requests.get(url_video, headers=headers).content
-# # 获取音频内容
-# audio_content = requests.get(url_audio, headers=headers).content
-#
-# # 视频数据保存
-# with open("video\\" + title + ".mp4", "wb") as video:
-#     # 写入数据
-#     video.write(video_content)
-#
-# # 音频数据保存
-# with open("video\\" + title + ".mp3", "wb") as audio:
-#     # 写入数据
-#     audio.write(audio_content)
+os.makedirs("video", exist_ok=True)
+"""数据保存"""
+# 获取视频内容
+video_content = requests.get(url_video, headers=headers).content
+# 获取音频内容
+audio_content = requests.get(url_audio, headers=headers).content
 
-# 合并命令
-# cmd = f"ffmpeg -hide_banner -i video\\{title}.mp4 -i video\\{title}.mp3 -c:v copy -c:a aac -strict experimental data\\{title}output.mp4"
-# subprocess.call(cmd)
+# 视频数据保存
+with open("video/" + title + ".mp4", "wb") as video:
+    # 写入数据
+    video.write(video_content)
+
+# 音频数据保存
+with open("video/" + title + ".mp3", "wb") as audio:
+    # 写入数据
+    audio.write(audio_content)
 
 # 确保输出目录存在
 os.makedirs("data", exist_ok=True)
@@ -91,6 +85,7 @@ final_clip.write_videofile(
     threads=4,
     verbose=False
 )
+
 # cmd = [
 #     "ffmpeg",
 #     "-hide_banner",
