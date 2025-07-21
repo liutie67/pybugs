@@ -1,8 +1,8 @@
 import re
 
 
-def getbvids():
-    with open("bvid.txt", "r") as f:
+def getbvids(bvid_path):
+    with open(bvid_path, "r") as f:
         contents = f.readlines()
     # print(type(contents))
     # print(len(contents))
@@ -17,6 +17,7 @@ def getbvids():
     return bvids[0:len(bvids)//2]
 
 if __name__ == '__main__':
-    print(getbvids())
-    print(getbvids()[6])
-    print(len(getbvids()))
+    bvid_path = "bvid-房产中介与炒房客.txt"
+    print(getbvids(bvid_path))
+    print(getbvids(bvid_path)[0])
+    print(len(getbvids(bvid_path)))
