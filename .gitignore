@@ -1,3 +1,5 @@
 /data/
 /video/
 .idea
+__pycache__/
+/test/
