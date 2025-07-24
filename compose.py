@@ -1,24 +1,10 @@
 import os
-import subprocess
 # 导入合并mp4和mp3相关模块
 # from moviepy.editor import *
 
 from title_txt_file import read_file_contents
+from utils import combine_video_audio
 
-
-def combine_video_audio(video_path, audio_path, output_path):
-    cmd = [
-        "ffmpeg",
-        "-i", video_path,  # 输入视频
-        "-i", audio_path,  # 输入音频
-        "-c:v", "copy",  # 视频流直接复制（不重新编码）
-        "-c:a", "copy",  # 音频转为AAC（兼容性最好，若原音频已是AAC可改为"copy"）
-        "-map", "0:v:0",  # 选择视频流
-        "-map", "1:a:0",  # 选择音频流
-        "-shortest",  # 以视频和音频中较短的时长为准
-        output_path
-    ]
-    subprocess.run(cmd, check=True)
 
 read_from = '/Volumes/tish/1113902-房产那些事儿'
 save_to = '/Volumes/tish/房产那些事儿'
