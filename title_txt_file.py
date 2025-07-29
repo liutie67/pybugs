@@ -18,7 +18,7 @@ def save_title_to_file(title, file_path, logging=False):
         print(f"写入文件时出错: {e}")
 
 
-def read_file_contents(file_path, logging=False):
+def read_file_contents(file_path, extension='',logging=False):
     """
     读取txt文件内容并返回
 
@@ -29,7 +29,7 @@ def read_file_contents(file_path, logging=False):
         with open(os.path.join(file_path, 'keys.txt'), 'r', encoding='utf-8') as file:
             contents = file.readlines()
         # 去除每行末尾的换行符
-        return [line.strip() for line in contents]
+        return [line.strip() + extension for line in contents]
     except FileNotFoundError as e:
         print(f"key.txt未创建: {e}", end='')
         return []
