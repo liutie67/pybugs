@@ -4,7 +4,7 @@ import requests
 import re
 
 from title_txt_file import save_title_to_file, is_title_exist
-from utils import combine_video_audio
+from utils import combine_video_audio, replace_illegal_char
 
 def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False):
     if len(bvid) < 2:
@@ -37,7 +37,7 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False):
     title = re.findall(',"title":"(.*?)","pubdate":', html)
     title = title[0]
     title = title[:60]
-    title = title.replace('\\', '_0_').replace("|", "_1_").replace(":", "_2_")
+    title = replace_illegal_char(title)
     # print(title)
     # 提取视频信息
     info = re.findall('window.__playinfo__=(.*?)</script>', html)[0]
@@ -55,7 +55,8 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False):
     # print(type(json_info))
     # 字符串是什么样的 -> str = "字'符'串" 里面"外面'，反之亦然
 
-    video_folder = os.path.join(video_path, ugc_season[0] + '-' + ugc_season[1])
+    video_folder = replace_illegal_char(os.path.join(video_path, ugc_season[0] + '-' + ugc_season[1]))
+
     # 确保输出目录存在
     os.makedirs(video_folder, exist_ok=True)
 

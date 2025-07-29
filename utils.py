@@ -55,3 +55,10 @@ def combine_video_audio(video_path, audio_path, output_path, log_file=None):
     else:
         # If no log file specified, run normally (output will go to console)
         subprocess.run(cmd, check=True)
+
+def replace_illegal_char(title):
+    title = title.replace('\\', '_0_')
+    title = title.replace('|', '_1_')
+    title = title.replace(':', '_2_')
+    title = title.replace('"', '_3_')
+    return title
