@@ -37,6 +37,7 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False):
     title = re.findall(',"title":"(.*?)","pubdate":', html)
     title = title[0]
     title = title[:60]
+    title = title.replace('\\', '_0_').replace("|", "_1_").replace(":", "_2_")
     # print(title)
     # 提取视频信息
     info = re.findall('window.__playinfo__=(.*?)</script>', html)[0]
