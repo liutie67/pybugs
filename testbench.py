@@ -7,7 +7,7 @@
 将keys.txt里文件名的特殊字符替换
 """
 # from title_txt_file import read_file_contents, save_title_to_file
-# file_path = './video/马督工/default-默认'
+# file_path = "/Users/liutie/Public/Drop Box/马督工/default-默认"
 # titles = read_file_contents(file_path)
 # for title in titles:
 #     # if ('\\' in title) or ('|' in title) or (':' in title):
