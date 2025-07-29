@@ -1,21 +1,44 @@
-import os.path
+import os
 
 
 def save_title_to_file(title, file_path, file_name='keys.txt', logging=False):
     """
-    将字符串title保存到指定txt文件中，支持追加模式，确保包含空格、汉字等能正确保存和读取
+    将字符串title保存到指定txt文件中，支持追加模式，确保包含空格、汉字等能正确保存和读取。
+    如果文件中已存在完全相同的行，则跳过写入。
 
-    :param logging:
-    :param file_name:
     :param title: 要保存的字符串，可能包含空格、汉字等
     :param file_path: 目标txt文件路径
+    :param file_name: 文件名，默认为'keys.txt'
+    :param logging: 是否打印日志信息，默认为False
     """
     try:
-        # 使用utf-8编码以支持汉字等非ASCII字符
-        # 模式'a+'表示追加读写，文件不存在则创建
-        with open(os.path.join(file_path, file_name), 'a+', encoding='utf-8') as file:
-            file.write(title + '\n')  # 添加换行符以便区分多次写入的内容
-        if logging: print(f"成功将内容写入文件: {file_path}")
+        full_path = os.path.join(file_path, file_name)
+
+        # 检查文件是否存在，如果不存在则直接写入
+        if not os.path.exists(full_path):
+            with open(full_path, 'a+', encoding='utf-8') as file:
+                file.write(title + '\n')
+            if logging:
+                print(f"文件不存在，已创建并成功将内容写入文件: {full_path}")
+            return
+
+        # 检查是否已存在相同的行
+        with open(full_path, 'r', encoding='utf-8') as file:
+            existing_lines = file.readlines()
+
+        # 去除每行的换行符进行比较
+        if any(line.strip() == title.strip() for line in existing_lines):
+            if logging:
+                print(f"内容已存在，跳过写入: {title}")
+            return
+
+        # 追加写入新内容
+        with open(full_path, 'a', encoding='utf-8') as file:
+            file.write(title + '\n')
+
+        if logging:
+            print(f"成功将内容写入文件: {full_path}")
+
     except Exception as e:
         print(f"写入文件时出错: {e}")
 
@@ -49,7 +72,7 @@ def is_title_exist(title, file_path, logging=False):
     """
     try:
         # 读取文件内容
-        existing_titles = read_file_contents(file_path, logging)
+        existing_titles = read_file_contents(file_path, logging=logging)
 
         # 检查title是否在现有内容中
         return title in existing_titles
@@ -68,9 +91,9 @@ if __name__ == "__main__":
     # 目标文件路径
     file_path = "./video"
     # 保存到文件
-    save_title_to_file(title, file_path)
-    save_title_to_file(title2, file_path)
-    save_title_to_file(title3, file_path)
+    save_title_to_file(title, file_path, file_name='exemple.txt')
+    save_title_to_file(title2, file_path, file_name='exemple.txt')
+    save_title_to_file(title3, file_path, file_name='exemple.txt')
 
     # 检查title是否存在
     exists3 = is_title_exist(title3, file_path)

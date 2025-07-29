@@ -1,5 +1,6 @@
 # 请求网址：视频ID数据包
 from datetime import datetime
+from itertools import islice
 
 import requests
 import json
@@ -14,24 +15,25 @@ headers = {
 }
 link = 'https://api.bilibili.com/x/space/wbi/arc/search'
 uper = '马督工'
+lice = 2
 
-with open('query.json', encoding='utf-8') as f:
+with open('query' + uper + '.json', encoding='utf-8') as f:
     query_dic = json.load(f)
 totol_times_try = 0
 # 查询参数
-for query in query_dic:
-    if 'DONE' in query_dic[query]:
-        print()
-        print('****************************************************************************************')
-        print('****************************************************************************************')
-        print('*************************************', query, '完成跳过 ***************************************')
-        print('****************************************************************************************')
-        print('****************************************************************************************')
-        print()
-        continue
+for query in islice(query_dic['pages'], lice):
+    # if 'DONE' in query_dic[query]:
+    #     print()
+    #     print('****************************************************************************************')
+    #     print('****************************************************************************************')
+    #     print('*************************************', query, '完成跳过 ***************************************')
+    #     print('****************************************************************************************')
+    #     print('****************************************************************************************')
+    #     print()
+    #     continue
     try:
         # 发送请求：获取bvid数据
-        link_json = requests.get(url=link, params=query_dic[query], headers=headers).json()
+        link_json = requests.get(url=link, params=query_dic['pages'][query], headers=headers).json()
         # 提取视频信息所在列表
         v_list = link_json["data"]["list"]["vlist"]
         # for循环遍历，提取列表里面元素bvid值
@@ -40,7 +42,7 @@ for query in query_dic:
             # bvids.append(bvid)
             url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
             print('1', totol_times_try, end='\t')
-            getmp3mp4(bvid=bvid, video_path='./video', headers=headers, url=url, query_dic=query_dic[query],
+            getmp3mp4(bvid=bvid, video_path='./video', headers=headers, url=url, query_dic=query_dic['pages'][query],
                       combined=True, uper=uper)
     except requests.exceptions.RequestException as e:
         totol_times_try += 1
@@ -53,7 +55,7 @@ for query in query_dic:
         print('????????????????????????????????????????????????????????????????????????????????????????')
         print()
         # 发送请求：获取bvid数据
-        link_json = requests.get(url=link, params=query_dic[query], headers=headers).json()
+        link_json = requests.get(url=link, params=query_dic['pages'][query], headers=headers).json()
         # 提取视频信息所在列表
         v_list = link_json["data"]["list"]["vlist"]
         # for循环遍历，提取列表里面元素bvid值
@@ -62,12 +64,13 @@ for query in query_dic:
             # bvids.append(bvid)
             url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
             print('2', totol_times_try, end='\t')
-            getmp3mp4(bvid=bvid, video_path='./video', headers=headers, url=url, query_dic=query_dic[query],
+            getmp3mp4(bvid=bvid, video_path='./video', headers=headers, url=url, query_dic=query_dic['pages'][query],
                       combined=True, uper=uper)
 
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    query_dic[query]["DONE"] = timestamp
-    with open('query.json', 'w', encoding='utf-8') as f:
+    query_dic['dones']['last_done'] = timestamp
+    query_dic['dones']['done_'+query] = timestamp
+    with open('query' + uper + '.json', 'w', encoding='utf-8') as f:
         json.dump(query_dic, f, ensure_ascii=False, indent=4)
 
     print()
