@@ -7,12 +7,13 @@
 将keys.txt里文件名的特殊字符替换
 """
 # from title_txt_file import read_file_contents, save_title_to_file
-# titles = read_file_contents('./video/马督工/default-默认')
+# file_path = './video/马督工/default-默认'
+# titles = read_file_contents(file_path)
 # for title in titles:
-#     if ('\\' in title) or ('|' in title) or (':' in title):
-#         title = title.replace('\\', '_0_').replace('|', '_1_').replace(':', '_2_')
-#         # print(title)
-#         save_title_to_file(title, file_name='keys-1.txt', file_path='./video/马督工/default-默认')
+#     # if ('\\' in title) or ('|' in title) or (':' in title):
+#     title = title.replace('\\', '_0_').replace('|', '_1_').replace(':', '_2_').replace('"', '_3_')
+#     # print(title)
+#     save_title_to_file(title, file_name='keys-1.txt', file_path=file_path)
 
 """
 替换指定文件夹里所有文件文件名里的特殊字符
@@ -53,7 +54,7 @@
 #         return "prefix_" + filename
 #     # 示例2: 替换文件名中的特定字符串
 #     def replace_string(filename):
-#         return filename.replace("\\", "_0_").replace("|", "_1_").replace(":", "_2_")
+#         return filename.replace("\\", "_0_").replace("|", "_1_").replace(":", "_2_").replace('"', "_3_")
 #     # 示例3: 去除文件名中的空格
 #     def remove_prefix(filename):
 #         if filename[:1] == "_":
