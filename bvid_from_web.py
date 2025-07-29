@@ -12,13 +12,12 @@ headers = {
     , "referer": "https://space.bilibili.com/316568752/upload/video"
     , "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
 }
-
-totol_times_try = 0
-
 link = 'https://api.bilibili.com/x/space/wbi/arc/search'
+uper = '马督工'
 
 with open('query.json', encoding='utf-8') as f:
     query_dic = json.load(f)
+totol_times_try = 0
 # 查询参数
 for query in query_dic:
     if 'DONE' in query_dic[query]:
@@ -41,7 +40,8 @@ for query in query_dic:
             # bvids.append(bvid)
             url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
             print('1', totol_times_try, end='\t')
-            getmp3mp4(bvid=bvid, video_path='./video', headers=headers, url=url, query_dic=query_dic[query],combined=True)
+            getmp3mp4(bvid=bvid, video_path='./video', headers=headers, url=url, query_dic=query_dic[query],
+                      combined=True, uper=uper)
     except requests.exceptions.RequestException as e:
         totol_times_try += 1
         print(f"请求失败：{e}")
@@ -63,7 +63,7 @@ for query in query_dic:
             url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
             print('2', totol_times_try, end='\t')
             getmp3mp4(bvid=bvid, video_path='./video', headers=headers, url=url, query_dic=query_dic[query],
-                      combined=True)
+                      combined=True, uper=uper)
 
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     query_dic[query]["DONE"] = timestamp

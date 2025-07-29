@@ -6,7 +6,7 @@ import re
 from title_txt_file import save_title_to_file, is_title_exist
 from utils import combine_video_audio, replace_illegal_char
 
-def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False):
+def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, uper=''):
     if len(bvid) < 2:
         print('bvid is too short')
         return
@@ -56,6 +56,7 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False):
     # 字符串是什么样的 -> str = "字'符'串" 里面"外面'，反之亦然
 
     video_folder = replace_illegal_char(os.path.join(video_path, ugc_season[0] + '-' + ugc_season[1]))
+    video_file = os.path.join(uper, video_folder)
 
     # 确保输出目录存在
     os.makedirs(video_folder, exist_ok=True)
