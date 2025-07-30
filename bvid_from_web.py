@@ -14,7 +14,7 @@ headers = {
     , "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
 }
 link = 'https://api.bilibili.com/x/space/wbi/arc/search'
-uper = '马督工'
+uper = 'mdg'
 lice = 2
 
 with open('query' + uper + '.json', encoding='utf-8') as f:
