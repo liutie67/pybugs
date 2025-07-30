@@ -15,9 +15,9 @@ headers = {
 }
 link = 'https://api.bilibili.com/x/space/wbi/arc/search'
 uper = 'mdg'
-lice = 2
+lice = 1
 
-with open('query' + uper + '.json', encoding='utf-8') as f:
+with open('query_' + uper + '.json', encoding='utf-8') as f:
     query_dic = json.load(f)
 totol_times_try = 0
 # 查询参数
@@ -70,7 +70,7 @@ for query in islice(query_dic['pages'], lice):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     query_dic['dones']['last_done'] = timestamp
     query_dic['dones']['done_'+query] = timestamp
-    with open('query' + uper + '.json', 'w', encoding='utf-8') as f:
+    with open('query_' + uper + '.json', 'w', encoding='utf-8') as f:
         json.dump(query_dic, f, ensure_ascii=False, indent=4)
 
     print()
