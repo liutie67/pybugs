@@ -1,7 +1,12 @@
 {
+    "headers": {
+        "cookie": "buvid3=91276CE0-CFE0-A545-BA8A-B36A0E0279CE65976infoc; b_nut=1752732365; _uuid=A17BA8FC-B6C1-28C2-E7F10-79C77A4A510F1066615infoc; enable_web_push=DISABLE; home_feed_column=5; browser_resolution=1795-968; buvid4=38A6AADE-2460-DCFE-4342-1B18C9CEFF1E66769-025071714-1A%2Fbp2hxpBrpqjbv3apscw%3D%3D; buvid_fp=427828aa957ae69edab1f904065678ce; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTMzMjgzNTYsImlhdCI6MTc1MzA2OTA5NiwicGx0IjotMX0.dcWfh8GFM_SGGesiFQh3cwKWkNBNDKfcWP41Y05VDcE; bili_ticket_expires=1753328296; CURRENT_FNVAL=2000; rpdid=|(um)~ukuYl|0J'u~lJ|Y|R)k; sid=8l9dzykr; b_lsid=D7DF6610D_198353B2EEC; bsource=search_bing",
+        "referer": "https://space.bilibili.com/316568752/upload/video",
+        "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+    },
     "dones": {
-        "last_done": "2025-07-30 10:01:51",
-        "done_p1": "2025-07-30 10:01:51",
+        "last_done": "2025-07-31 10:06:02",
+        "done_p1": "2025-07-31 10:06:02",
         "done_p2": "2025-07-30 09:58:39",
         "done_p3": "2025-07-29 16:06:35",
         "done_p4": "2025-07-29 16:06:55",

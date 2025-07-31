@@ -51,7 +51,8 @@ def check_files_in_directory(directory, extension=''):
 
 # 示例用法
 if __name__ == "__main__":
-    directory_path = "/Users/liutie/Public/Drop Box/马督工"  # 替换为你要检查的目录路径
+    # directory_path = "/Users/liutie/Public/Drop Box/马督工"  # 替换为你要检查的目录路径
+    directory_path = "/media/liutie/备用盘/video/mdg"
 
     upers = os.listdir(directory_path)
     for uper in upers:
