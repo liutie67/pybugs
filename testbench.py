@@ -1,3 +1,8 @@
+# import os
+# print(os.path.abspath(__file__))
+# print(os.path.dirname(os.path.abspath(__file__)))
+
+
 # from datetime import datetime
 # timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 # print(timestamp)

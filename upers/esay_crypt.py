@@ -1,6 +1,4 @@
-from key_manager import generate_and_save_key, get_cipher_suite
-import json
-import sys
+from upers.key_manager import generate_and_save_key, get_cipher_suite
 
 
 def encrypt_json_file(input_file, output_file):

@@ -1,4 +1,3 @@
-# 请求网址：视频ID数据包
 from datetime import datetime
 from itertools import islice
 
@@ -6,25 +5,16 @@ import requests
 import json
 
 from url2mp3mp4 import getmp3mp4
+from upers.query_manager import get_query_dic, save_query_dic2enc
 
 
 def get1up(uper, lice=None, video_path='./video', exist_nm=5):
     link = 'https://api.bilibili.com/x/space/wbi/arc/search'
-    with open('./upers/query_' + uper + '.json', encoding='utf-8') as f:
-        query_dic = json.load(f)
-    totol_times_try = 0
+    query_dic = get_query_dic(uper)
+    total_times_try = 0
     e_nm = 0
     # 查询参数
     for query in islice(query_dic['pages'], lice):
-        # if 'DONE' in query_dic[query]:
-        #     print()
-        #     print('****************************************************************************************')
-        #     print('****************************************************************************************')
-        #     print('*************************************', query, '完成跳过 ***************************************')
-        #     print('****************************************************************************************')
-        #     print('****************************************************************************************')
-        #     print()
-        #     continue
         try:
             # 发送请求：获取bvid数据
             link_json = requests.get(url=link, params=query_dic['pages'][query], headers=query_dic['headers']).json()
@@ -35,7 +25,7 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                 bvid = v["bvid"]
                 # bvids.append(bvid)
                 url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
-                print('1', totol_times_try, end='\t')
+                print('1', total_times_try, end='\t')
                 e = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
                           combined=True, uper=uper)
                 if e == 'existed':
@@ -43,7 +33,7 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                 if e_nm >= exist_nm:
                     break
         except requests.exceptions.RequestException as e:
-            totol_times_try += 1
+            total_times_try += 1
             print(f"请求失败：{e}")
             print()
             print('????????????????????????????????????????????????????????????????????????????????????????')
@@ -61,7 +51,7 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                 bvid = v["bvid"]
                 # bvids.append(bvid)
                 url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
-                print('2', totol_times_try, end='\t')
+                print('2', total_times_try, end='\t')
                 e = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
                           combined=True, uper=uper)
                 if e == 'existed':
@@ -72,8 +62,7 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         query_dic['dones']['last_done'] = timestamp
         query_dic['dones']['done_'+query] = timestamp
-        with open('./upers/query_' + uper + '.json', 'w', encoding='utf-8') as f:
-            json.dump(query_dic, f, ensure_ascii=False, indent=4)
+        save_query_dic2enc(uper, query_dic)
 
         print()
         print('----------------------------------------------------------------------------------------')

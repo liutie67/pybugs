@@ -7,3 +7,4 @@ __pycache__/
 /composed/
 bvid*.txt
 *.key
+upers/json/*.json
