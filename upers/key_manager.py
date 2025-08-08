@@ -2,7 +2,7 @@ from cryptography.fernet import Fernet
 import os
 
 
-KEY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'upers.key')
+KEY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'upers.fernet')
 
 
 def generate_and_save_key():

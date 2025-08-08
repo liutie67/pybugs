@@ -6,5 +6,5 @@ __pycache__/
 .DS_Store
 /composed/
 bvid*.txt
-*.key
+*.fernet
 upers/json/*.json
