@@ -72,5 +72,8 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
         print('----------------------------------------------------------------------------------------')
         print()
 
-get1up(uper='mdg', lice=1, video_path='/media/liutie/备用盘/video')
-get1up(uper='lyjgs', lice=1, video_path='/media/liutie/备用盘/video')
+media_path = '/media/liutie/备用盘/video'
+get1up(uper='mdg', video_path=media_path)
+get1up(uper='lyjgs', video_path=media_path)
+get1up(uper='slxjj', video_path=media_path)
+
