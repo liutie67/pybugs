@@ -8,11 +8,12 @@ import json
 from url2mp3mp4 import getmp3mp4
 
 
-def get1up(uper, lice=None, video_path='./video'):
+def get1up(uper, lice=None, video_path='./video', exist_nm=5):
     link = 'https://api.bilibili.com/x/space/wbi/arc/search'
     with open('./upers/query_' + uper + '.json', encoding='utf-8') as f:
         query_dic = json.load(f)
     totol_times_try = 0
+    e_nm = 0
     # 查询参数
     for query in islice(query_dic['pages'], lice):
         # if 'DONE' in query_dic[query]:
@@ -35,8 +36,12 @@ def get1up(uper, lice=None, video_path='./video'):
                 # bvids.append(bvid)
                 url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
                 print('1', totol_times_try, end='\t')
-                getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
+                e = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
                           combined=True, uper=uper)
+                if e == 'existed':
+                    e_nm += 1
+                if e_nm >= exist_nm:
+                    break
         except requests.exceptions.RequestException as e:
             totol_times_try += 1
             print(f"请求失败：{e}")
@@ -57,8 +62,12 @@ def get1up(uper, lice=None, video_path='./video'):
                 # bvids.append(bvid)
                 url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
                 print('2', totol_times_try, end='\t')
-                getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
+                e = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
                           combined=True, uper=uper)
+                if e == 'existed':
+                    e_nm += 1
+                if e_nm >= exist_nm:
+                    break
 
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         query_dic['dones']['last_done'] = timestamp
