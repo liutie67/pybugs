@@ -8,3 +8,4 @@ __pycache__/
 bvid*.txt
 *.fernet
 upers/json/*.json
+upers/enc/query_exemple.enc
