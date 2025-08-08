@@ -30,7 +30,7 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                           combined=True, uper=uper)
                 if e == 'existed':
                     e_nm += 1
-                if e_nm >= exist_nm:
+                if e_nm >= exist_nm and lice is not None:
                     break
         except requests.exceptions.RequestException as e:
             total_times_try += 1
@@ -54,10 +54,6 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                 print('2', total_times_try, end='\t')
                 e = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
                           combined=True, uper=uper)
-                if e == 'existed':
-                    e_nm += 1
-                if e_nm >= exist_nm:
-                    break
 
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         query_dic['dones']['last_done'] = timestamp
@@ -73,7 +69,8 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
         print()
 
 media_path = '/media/liutie/备用盘/video'
-get1up(uper='mdg', video_path=media_path)
-get1up(uper='lyjgs', video_path=media_path)
-get1up(uper='slxjj', video_path=media_path)
+get1up(uper='mdg', lice=1, video_path=media_path)
+get1up(uper='lyjgs', lice=1, video_path=media_path)
+get1up(uper='slxjj', lice=1, video_path=media_path)
+get1up(uper='bzxbbd', lice=1, video_path=media_path)
 
