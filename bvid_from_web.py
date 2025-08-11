@@ -30,6 +30,8 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                           combined=True, uper=uper)
                 if e == 'existed':
                     e_nm += 1
+                else:
+                    e_nm = 0
                 if e_nm >= exist_nm and lice is not None:
                     break
         except requests.exceptions.RequestException as e:
