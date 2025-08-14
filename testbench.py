@@ -1,3 +1,30 @@
+# import hashlib
+#
+# p =  [
+#     "dm_cover_img_str=R2VGb3JjZSBHVFggNDgwLCBvciBzaW1pbGFyTWVzYQ",
+#     "dm_img_list=[{\"x\":3172,\"y\":2006,\"z\":0,\"timestamp\":105,\"k\":98,\"type\":0}]",
+#     "dm_img_str=V2ViR0wgMS",
+#     "keyword=",
+#     "mid=316568752",
+#     "order=pubdate",
+#     "order_avoided=true",
+#     "platform=web",
+#     "pn=1",
+#     "ps=42",
+#     "tid=0",
+#     "web_location=333.1387",
+#     "wts=1753239905"
+# ]
+#
+# w_rid = "9cff98fc65d7775c6ab423bad45d33d0"
+#
+# y = '&'.join(p)
+# string = y + "ea1db124af3c7062474697fa704f4ff8"
+# MD5 = hashlib.md5()
+# MD5.update(string.encode('utf-8'))
+# w = MD5.hexdigest()
+# print(w)
+
 # import os
 # print(os.path.abspath(__file__))
 # print(os.path.dirname(os.path.abspath(__file__)))
