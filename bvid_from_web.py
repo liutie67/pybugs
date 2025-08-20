@@ -75,4 +75,5 @@ get1up(uper='mdg', lice=1, video_path=media_path)
 get1up(uper='lyjgs', lice=1, video_path=media_path)
 get1up(uper='slxjj', lice=1, video_path=media_path)
 get1up(uper='bzxbbd', lice=1, video_path=media_path)
+get1up(uper='bsf', lice=1, video_path=media_path)
 
