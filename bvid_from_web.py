@@ -1,8 +1,7 @@
+import platform
 from datetime import datetime
 from itertools import islice
-
 import requests
-import json
 
 from url2mp3mp4 import getmp3mp4
 from upers.query_manager import get_query_dic, save_query_dic2enc
@@ -70,10 +69,14 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
         print('----------------------------------------------------------------------------------------')
         print()
 
-media_path = '/media/liutie/备用盘/video'
-get1up(uper='mdg', lice=1, video_path=media_path)
-get1up(uper='lyjgs', lice=1, video_path=media_path)
-get1up(uper='slxjj', lice=1, video_path=media_path)
-get1up(uper='bzxbbd', lice=1, video_path=media_path)
-get1up(uper='bsf', lice=1, video_path=media_path)
 
+if __name__ == '__main__':
+    # 使用示例
+    system = platform.system()
+    print('--------------', system, '--------------')
+    if system == 'Linux':
+        media_path = 'path/to/video'
+        get1up(uper='uper', lice=1, video_path=media_path)
+    elif system == 'Darwin':
+        media_path = 'path/to/video'
+        get1up(uper='uper', lice=None, video_path=media_path)

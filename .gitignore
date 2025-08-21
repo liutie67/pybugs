@@ -9,3 +9,4 @@ bvid*.txt
 *.fernet
 upers/json/*.json
 upers/enc/query_exemple.enc
+local_launchpad.py
