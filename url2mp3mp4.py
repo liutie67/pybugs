@@ -65,7 +65,8 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
         print(uploadDate + bvid + title, "已下载，跳过。")
         return 'existed'
     elif is_title_exist(uploadDate + bvid + title + " 跳过:充电专属", video_folder):
-        return print(uploadDate + bvid + title + " 跳过:充电专属", "已存在，跳过。")
+        print(uploadDate + bvid + title + " 跳过:充电专属", "已存在，跳过。")
+        return 'existed'
 
     try:
         # 提取视频链接
