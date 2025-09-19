@@ -12,6 +12,7 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
     query_dic = get_query_dic(uper)
     total_times_try = 0
     e_nm = 0
+    downloaded = 0
     # 查询参数
     for query in islice(query_dic['pages'], lice):
         try:
@@ -31,6 +32,7 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                     e_nm += 1
                 else:
                     e_nm = 0
+                    downloaded = 1
                 if e_nm >= exist_nm and lice is not None:
                     break
         except requests.exceptions.RequestException as e:
@@ -68,6 +70,8 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
         print('----------------------------------------------------------------------------------------')
         print('----------------------------------------------------------------------------------------')
         print()
+
+    return downloaded, uper
 
 
 if __name__ == '__main__':
