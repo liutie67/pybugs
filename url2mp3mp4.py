@@ -106,4 +106,4 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
     save_title_to_file(uploadDate + bvid + title, video_folder)
     print("title:", title, "bvid:", bvid, "下载成功。")
 
-    return 0
+    return 0, uploadDate, title, video_folder

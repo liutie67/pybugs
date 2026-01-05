@@ -13,6 +13,10 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
     total_times_try = 0
     e_nm = 0
     downloaded = 0
+    upload_dates = []
+    folders = []
+    titles = []
+    bvids = []
     # 查询参数
     for query in islice(query_dic['pages'], lice):
         try:
@@ -26,18 +30,22 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                 # bvids.append(bvid)
                 url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
                 print('1', total_times_try, end='\t')
-                e = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
+                e, upload_date, title, folder = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
                           combined=True, uper=uper)
                 if e == 'existed':
                     e_nm += 1
                 else:
                     e_nm = 0
-                    downloaded = 1
+                    upload_dates.append(upload_date)
+                    folders.append(folder)
+                    titles.append(title)
+                    bvids.append(bvid)
+                    downloaded = downloaded + 1
                 if e_nm >= exist_nm and lice is not None:
                     break
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException as err:
             total_times_try += 1
-            print(f"请求失败：{e}")
+            print(f"请求失败：{err}")
             print()
             print('????????????????????????????????????????????????????????????????????????????????????????')
             print('????????????????????????????????????????????????????????????????????????????????????????')
@@ -55,8 +63,19 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                 # bvids.append(bvid)
                 url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
                 print('2', total_times_try, end='\t')
-                e = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
+                e, upload_date, title, folder = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
                           combined=True, uper=uper)
+                if e == 'existed':
+                    e_nm += 1
+                else:
+                    e_nm = 0
+                    upload_dates.append(upload_date)
+                    folders.append(folder)
+                    titles.append(title)
+                    bvids.append(bvid)
+                    downloaded = downloaded + 1
+                if e_nm >= exist_nm and lice is not None:
+                    break
 
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         query_dic['dones']['last_done'] = timestamp
@@ -71,7 +90,7 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
         print('----------------------------------------------------------------------------------------')
         print()
 
-    return downloaded, uper
+    return downloaded, uper, upload_dates, titles, folders, bvids
 
 
 if __name__ == '__main__':
