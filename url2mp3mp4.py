@@ -9,7 +9,7 @@ from utils import combine_video_audio, replace_illegal_char
 def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, uper=''):
     if len(bvid) < 2:
         print('bvid is too short')
-        return
+        return None, None, None, None
 
     # 初始化调用次数（如果不存在）
     if not hasattr(getmp3mp4, "call_count"):
@@ -63,10 +63,10 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
 
     if is_title_exist(uploadDate + bvid + title, video_folder):
         print(uploadDate + bvid + title, "已下载，跳过。")
-        return 'existed'
+        return 'existed', None, None, None
     elif is_title_exist(uploadDate + bvid + title + " 跳过:充电专属", video_folder):
         print(uploadDate + bvid + title + " 跳过:充电专属", "已存在，跳过。")
-        return 'existed'
+        return 'existed', None, None, None
 
     try:
         # 提取视频链接
@@ -77,7 +77,8 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
         # print(url_audio)
     except KeyError:
         save_title_to_file(uploadDate + bvid + title + " 跳过:充电专属", video_folder)
-        return print("跳过充电专属视频!")
+        print("跳过充电专属视频!")
+        return None, None, None, None
 
     """数据保存"""
     # 获取视频内容
