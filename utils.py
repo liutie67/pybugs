@@ -62,4 +62,5 @@ def replace_illegal_char(title):
     title = title.replace(':', '_2_')
     title = title.replace('"', '_3_')
     title = title.replace('?', '_4_')
+    # title = title.replace('/', '_5_')
     return title

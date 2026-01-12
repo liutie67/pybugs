@@ -59,7 +59,7 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
     if 'v2' in uper:
         title = new_title
     title = title[:60]
-    title = replace_illegal_char(title)
+    title = replace_illegal_char(title).replace('/', '_5_')
     # print(title)
     # 提取视频信息
     info = re.findall('window.__playinfo__=(.*?)</script>', html)[0]
