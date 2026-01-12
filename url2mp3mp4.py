@@ -3,6 +3,8 @@ import os
 import requests
 import re
 
+from bs4 import BeautifulSoup
+
 from title_txt_file import save_title_to_file, is_title_exist
 from utils import combine_video_audio, replace_illegal_char
 
@@ -32,10 +34,30 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
     html = response.text
     # print(html)
 
+    soup = BeautifulSoup(html, 'html.parser')
+
+    # 定位 class 为 video-title 的 h1 标签
+    h1_tag = soup.find('h1', class_='video-title')
+
+    new_title = 'DefaulT'
+    if h1_tag:
+        # .get('title') 获取 title 属性，比 .text 更保险，防止标签内有其他隐藏元素
+        new_title = h1_tag.get('title')
+        # 输出: 【年度总结】一口气了解过去一年的全球经济｜关税战新格局
+    else:
+        # 备选方案：如果找不到 h1，找 title 标签并去除后缀
+        title_tag = soup.find('title')
+        if title_tag:
+            full_title = title_tag.text
+            new_title = full_title.split('_哔哩哔哩')[0]
+
     """解析数据：提取我们需要的数据内容"""
     # 提取标题
     title = re.findall(',"title":"(.*?)","pubdate":', html)
     title = title[0]
+
+    if 'v2' in uper:
+        title = new_title
     title = title[:60]
     title = replace_illegal_char(title)
     # print(title)
