@@ -1,4 +1,5 @@
 import platform
+import time
 from datetime import datetime
 from itertools import islice
 import requests
@@ -44,6 +45,8 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                 if e_nm >= exist_nm and lice is not None:
                     break
         except requests.exceptions.RequestException as err:
+            time.sleep(10)
+
             total_times_try += 1
             print(f"请求失败：{err}")
             print()
@@ -63,8 +66,13 @@ def get1up(uper, lice=None, video_path='./video', exist_nm=5):
                 # bvids.append(bvid)
                 url = f'https://www.bilibili.com/video/{bvid}/?spm_id_from=333.1387.upload.video_card.click'
                 print('2', total_times_try, end='\t')
-                e, upload_date, title, folder = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
-                          combined=True, uper=uper)
+                try:
+                    e, upload_date, title, folder = getmp3mp4(bvid=bvid, video_path=video_path, headers=query_dic['headers'], url=url, query_dic=query_dic['pages'][query],
+                              combined=True, uper=uper)
+                except Exception as err:
+                    print("尝试二·失败 ", err)
+                    return None, None, None, None, None, None
+
                 if e == 'existed':
                     e_nm += 1
                 else:
