@@ -45,9 +45,10 @@ def run_bilibili_task(config: dict):
     for uper_id in config['upers']:
         uper_name = config['uper_names'].get(uper_id, uper_id)
 
+        print(f'{uper_name}({uper_id}): ')
         # 爬虫下载
         down_count, _, upload_dates, titles, folders, bvids = get1up(
-            uper=uper_id, lice=1, video_path=config['media_path']
+            uper=uper_id, lice=1, video_path=config['media_path'], exist_nm=3,
         )
 
         if down_count > 0:
@@ -67,15 +68,19 @@ def run_bilibili_task(config: dict):
 
                 # 4. 拼装单条详情
                 detail = (
-                    f"🎬 {uper_name} | {titles[i]}\n"
+                    f"➡️ {uper_name}"
+                    f"🎬 {titles[i]}\n"
                     f"🔗 https://www.bilibili.com/video/{bvids[i]}\n"
-                    f"📝 摘要: {short_summary}"
+                    f"🤖 ({config['whisper_model']})"
+                    f"🤖 ({config['llm_model']})"
+                    f"📝 主要内容: "
+                    f"{short_summary}"
                 )
                 update_details.append(detail)
                 update_details.append("-" * 15)
 
         # 发送汇总消息
     if total_new > 0:
-        final_msg = f"✅ 今日更新报告 ({total_new}个视频)\n\n" + "\n".join(update_details)
+        final_msg = f"✅ 更新报告 ({total_new}个视频)\n\n" + "\n".join(update_details)
         push_to_feishu(config['feishu_webhook'], final_msg)
         logger.success("扫描任务完成且已推送")
