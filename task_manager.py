@@ -68,12 +68,12 @@ def run_bilibili_task(config: dict):
 
                 # 4. 拼装单条详情
                 detail = (
-                    f"➡️ {uper_name}"
+                    f"➡️ {uper_name}\n"
                     f"🎬 {titles[i]}\n"
                     f"🔗 https://www.bilibili.com/video/{bvids[i]}\n"
-                    f"🤖 ({config['whisper_model']})"
-                    f"🤖 ({config['llm_model']})"
-                    f"📝 主要内容: "
+                    f"🤖 ({config['whisper_model']})\n"
+                    f"🤖 ({config['llm_model']})\n"
+                    f"📝 主要内容:\n"
                     f"{short_summary}"
                 )
                 update_details.append(detail)
