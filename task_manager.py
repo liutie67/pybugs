@@ -59,23 +59,43 @@ def run_bilibili_task(config: dict):
                     i] / f"{upload_dates[i]}{bvids[i]}{titles[i]}.mp4"
 
                 # 2. 调用 AI 模块
-                full_summary = generate_video_summary(str(video_file), bvids[i], config)
+                ai_result = generate_video_summary(str(video_file), bvids[i], config)
+
+                # 统一规格化为列表，方便统一逻辑处理
+                llm_config = config['llm_model']
+                if isinstance(llm_config, list):
+                    model_list = llm_config
+                    summary_list = ai_result
+                else:
+                    model_list = [llm_config]
+                    summary_list = [ai_result]
 
                 # 3. 推送前截断 (250-300字)
                 # 确保飞书通知简洁，不刷屏
-                limit = 280
-                short_summary = full_summary[:limit] + "..." if len(full_summary) > limit else full_summary
+                summary_sections = []
+                limit = 280  # 单个模型的字数限制
+
+                for model_name, content in zip(model_list, summary_list):
+                    # 防止内容为空的处理
+                    content = str(content) if content else "无内容"
+                    # 截断
+                    short_s = content[:limit] + "..." if len(content) > limit else content
+                    # 格式: 🤖 [模型名] \n 内容
+                    summary_sections.append(f"🤖 [{model_name}]\n{short_s}")
+
+                # 将所有模型的总结用换行隔开
+                final_summary_text = "\n\n".join(summary_sections)
 
                 # 4. 拼装单条详情
                 detail = (
                     f"➡️ {uper_name}\n"
                     f"🎬 {titles[i]}\n"
                     f"🔗 https://www.bilibili.com/video/{bvids[i]}\n"
-                    f"🤖 ({config['whisper_model']})\n"
-                    f"🤖 ({config['llm_model']})\n"
+                    f"👂 听写:({config['whisper_model']})\n"
                     f"📝 主要内容:\n"
-                    f"{short_summary}"
+                    f"{final_summary_text}"
                 )
+
                 update_details.append(detail)
                 update_details.append("-" * 15)
 
