@@ -8,7 +8,8 @@ from bs4 import BeautifulSoup
 from title_txt_file import save_title_to_file, is_title_exist
 from utils import combine_video_audio, replace_illegal_char
 
-def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, uper=''):
+
+def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, uper='', mode='up'):
     if len(bvid) < 2:
         print('bvid is too short')
         return None, None, None, None
@@ -23,7 +24,7 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
     else:
         pn = query_dic["pn"]
         ps = int(query_dic["ps"])
-        print(getmp3mp4.call_count, '\t', pn + ' -', getmp3mp4.call_count % ps, end='\t')
+        print(getmp3mp4.call_count, '\t', str(pn) + ' -', getmp3mp4.call_count % ps, end='\t')
 
     # 发送请求
     response = requests.get(url, headers=headers, stream=True)
@@ -52,33 +53,58 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
             new_title = full_title.split('_哔哩哔哩')[0]
 
     """解析数据：提取我们需要的数据内容"""
+
+    # === 根据 mode 提取 UP 主的 UID ===
+    uid_folder = ""
+    if mode == 'fav':
+        try:
+            # B站视频页面的 window.__INITIAL_STATE__ 中包含了 owner 结构
+            uid_match = re.search(r'"owner":\s*\{\s*"mid":\s*(\d+)', html)
+            if uid_match:
+                uid_folder = uid_match.group(1)
+            else:
+                # 备选正则：如果没找到 owner 结构，尝试匹配空间主页链接
+                uid_match_alt = re.search(r'space\.bilibili\.com/(\d+)', html)
+                uid_folder = uid_match_alt.group(1) if uid_match_alt else "unknown_uid"
+        except Exception as e:
+            print(f"UID提取异常: {e}")
+            uid_folder = "unknown_uid"
+
     # 提取标题
     title = re.findall(',"title":"(.*?)","pubdate":', html)
-    title = title[0]
+    if title:
+        title = title[0]
+    else:
+        title = new_title
 
     if 'v2' in uper:
         title = new_title
     title = title[:60]
     title = replace_illegal_char(title).replace('/', '_5_')
-    # print(title)
+
     # 提取视频信息
     info = re.findall('window.__playinfo__=(.*?)</script>', html)[0]
     uploadDate = re.findall('itemprop="uploadDate" content="(.*?)">', html)[0]
     uploadDate = uploadDate.replace(' ', '-').replace(':', '-')
+
     try:
         ugc_season = re.findall(r'"ugc_season":\s*{\s*"id":\s*(\d+),\s*"title":\s*"([^"]+)"', html)[0]
-        print(ugc_season[0] + '-' + ugc_season[1]+': ', end='\t')
+        print(ugc_season[0] + '-' + ugc_season[1] + ': ', end='\t')
     except IndexError:
         print('No Season Video: ', end='\t')
         ugc_season = ('default', '默认')
-    # print(type(info))
-    json_info = json.loads(info)
-    # print(json_info)
-    # print(type(json_info))
-    # 字符串是什么样的 -> str = "字'符'串" 里面"外面'，反之亦然
 
-    video_folder = replace_illegal_char(os.path.join(video_path, uper, ugc_season[0] + '-' + ugc_season[1]))
-    # video_file = os.path.join(uper, video_folder)
+    json_info = json.loads(info)
+
+    # === 修改：根据 mode 动态组合文件夹路径 ===
+    if mode == 'fav':
+        # 收藏夹模式：video_path / uper(即收藏夹名) / UID / 剧集名
+        video_folder = replace_illegal_char(
+            os.path.join(video_path, uper, uid_folder, ugc_season[0] + '-' + ugc_season[1]))
+    else:
+        # UP主模式：video_path / uper / 剧集名
+        video_folder = replace_illegal_char(os.path.join(video_path, uper, ugc_season[0] + '-' + ugc_season[1]))
+    # =======================================
 
     # 确保输出目录存在
     os.makedirs(video_folder, exist_ok=True)
@@ -93,10 +119,8 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
     try:
         # 提取视频链接
         url_video = json_info['data']['dash']['video'][0]['baseUrl']
-        # print(url_video)
         # 提取音频链接
         url_audio = json_info['data']['dash']['audio'][0]['baseUrl']
-        # print(url_audio)
     except KeyError:
         save_title_to_file(uploadDate + bvid + title + " 跳过:充电专属", video_folder)
         print("跳过充电专属视频!")
@@ -110,12 +134,10 @@ def getmp3mp4(bvid, video_path, headers, url, query_dic=None, combined=False, up
 
     # 视频数据保存
     with open(os.path.join(video_folder, uploadDate + bvid + title + "-s.mp4"), "wb") as video:
-        # 写入数据
         video.write(video_content)
 
     # 音频数据保存
     with open(os.path.join(video_folder, uploadDate + bvid + title + "-s.mp3"), "wb") as audio:
-        # 写入数据
         audio.write(audio_content)
 
     if combined:
