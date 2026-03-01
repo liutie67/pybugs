@@ -5,7 +5,7 @@ from pathlib import Path
 from loguru import logger
 
 # 引入你的爬虫和上面的 AI 模块
-from bvid_from_web import get1up
+from bvid_from_web import get1up, get_fav_folder
 from ai_summarize_video.localai_video_summarize import generate_video_summary
 
 
@@ -46,10 +46,15 @@ def run_bilibili_task(config: dict):
         uper_name = config['uper_names'].get(uper_id, uper_id)
 
         print(f'{uper_name}({uper_id}): ')
-        # 爬虫下载
-        down_count, _, upload_dates, titles, folders, bvids = get1up(
-            uper=uper_id, lice=1, video_path=config['media_path'], exist_nm=3,
-        )
+
+        if 'fav_' in uper_id:
+            down_count, _, upload_dates, titles, folders, bvids = get_fav_folder(
+                fav_id=uper_id, lice=1, video_path=config['media_path'], exist_nm=3,
+            )
+        else:
+            down_count, _, upload_dates, titles, folders, bvids = get1up(
+                uper=uper_id, lice=1, video_path=config['media_path'], exist_nm=3,
+            )
 
         if down_count > 0:
             total_new += down_count
