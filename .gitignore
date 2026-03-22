@@ -10,3 +10,6 @@ bvid*.txt
 upers/json/*.json
 upers/enc/query_exemple.enc
 local_launchpad.py
+cookies.txt
+*.mp4
+*.mp3

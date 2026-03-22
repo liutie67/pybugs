@@ -89,7 +89,7 @@ def run_bilibili_task(config: dict):
                     summary_sections.append(f"🤖 [{model_name}]\n{short_s}")
 
                 # 将所有模型的总结用换行隔开
-                final_summary_text = "\n\n".join(summary_sections)
+                final_summary_text = "\n".join(summary_sections)
 
                 # 4. 拼装单条详情
                 detail = (
@@ -106,6 +106,6 @@ def run_bilibili_task(config: dict):
 
         # 发送汇总消息
     if total_new > 0:
-        final_msg = f"✅ 更新报告 ({total_new}个视频)\n\n" + "\n".join(update_details)
+        final_msg = f"✅ 更新报告 ({total_new}个视频)\n" + "\n".join(update_details)
         push_to_feishu(config['feishu_webhook'], final_msg)
         logger.success("扫描任务完成且已推送")
