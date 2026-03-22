@@ -71,8 +71,7 @@ def generate_video_summary(video_path: str, bvid: str, config: dict) -> Union[st
         [STRICT CONSTRAINTS]
         1. Output Language: Write the summary strictly in Simplified Chinese.
         2. Format: Output exactly ONE single continuous paragraph. NO bullet points, NO lists, NO newlines.
-        3. Length: Keep it under 250 characters.
-        4. Zero Filler: Output the summary DIRECTLY. Do NOT use introductory phrases like "The video discusses", "Summary:", or "Here is the summary".
+        3. Zero Filler: Output the summary DIRECTLY. Do NOT use introductory phrases like "The video discusses", "Summary:", or "Here is the summary".
         """
 
         summaries_list = []
